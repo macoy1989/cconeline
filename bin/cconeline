@@ -408,23 +408,20 @@ CONF="$CLAUDE_DIR/statusline.conf"
 > "$CONF"
 
 ask() {
-    local label="$1" flag="$2" example="$3"
+    local label="$1" flag="$2" example="$3" ans resolved
     if [ "$YES_ALL" = "1" ]; then
         echo "  Include $label? (e.g. $example) [Y/n]: y"
         echo "${flag}=1" >> "$CONF"
         return
     fi
-    read -r -s -p "  Include $label? (e.g. $example) [Y/n]: " ans
-    if [[ "${ans:-y}" =~ ^[Yy] ]]; then
-        echo "y"
-        echo "${flag}=1" >> "$CONF"
-    else
-        echo "n"
-        echo "${flag}=0" >> "$CONF"
-    fi
+    read -r -p "  Include $label? (e.g. $example) [Y/n]: " ans
+    [[ "${ans:-y}" =~ ^[Yy] ]] && resolved="y" || resolved="n"
+    printf '\033[1A\033[2K  Include %s? (e.g. %s) [Y/n]: %s\n' "$label" "$example" "$resolved"
+    [ "$resolved" = "y" ] && echo "${flag}=1" >> "$CONF" || echo "${flag}=0" >> "$CONF"
 }
 
 ask_rtk() {
+    local ans confirm resolved
     if [ "$YES_ALL" = "1" ]; then
         echo "  Include RTK savings? (e.g. ✂️ 1.5M (5.5%)) [Y/n]: y"
         if ! command -v rtk &>/dev/null; then
@@ -438,9 +435,10 @@ ask_rtk() {
         echo "STATUSLINE_RTK=1" >> "$CONF"
         return
     fi
-    read -r -s -p "  Include RTK savings? (e.g. ✂️ 1.5M (5.5%)) [Y/n]: " ans
-    if [[ "${ans:-y}" =~ ^[Yy] ]]; then
-        echo "y"
+    read -r -p "  Include RTK savings? (e.g. ✂️ 1.5M (5.5%)) [Y/n]: " ans
+    [[ "${ans:-y}" =~ ^[Yy] ]] && resolved="y" || resolved="n"
+    printf '\033[1A\033[2K  Include RTK savings? (e.g. ✂️ 1.5M (5.5%%)) [Y/n]: %s\n' "$resolved"
+    if [ "$resolved" = "y" ]; then
         if ! command -v rtk &>/dev/null; then
             echo ""
             echo "  WARNING: rtk is not installed."
@@ -448,21 +446,34 @@ ask_rtk() {
             echo "  Activate: rtk init -g --auto-patch"
             echo "  Verify:   rtk gain"
             echo ""
-            read -r -s -p "  Keep RTK enabled (assuming you will install it)? [Y/n]: " confirm
-            if [[ "${confirm:-y}" =~ ^[Yy] ]]; then
-                echo "y"
-                echo "STATUSLINE_RTK=1" >> "$CONF"
-            else
-                echo "n"
-                echo "STATUSLINE_RTK=0" >> "$CONF"
-            fi
+            read -r -p "  Keep RTK enabled (assuming you will install it)? [Y/n]: " confirm
+            [[ "${confirm:-y}" =~ ^[Yy] ]] && resolved="y" || resolved="n"
+            printf '\033[1A\033[2K  Keep RTK enabled (assuming you will install it)? [Y/n]: %s\n' "$resolved"
+            [ "$resolved" = "y" ] && echo "STATUSLINE_RTK=1" >> "$CONF" || echo "STATUSLINE_RTK=0" >> "$CONF"
         else
             echo "STATUSLINE_RTK=1" >> "$CONF"
         fi
     else
-        echo "n"
         echo "STATUSLINE_RTK=0" >> "$CONF"
     fi
+}
+
+show_preview() {
+    source "$CONF"
+    local out=""
+    [ "${STATUSLINE_DIR:-0}" = "1" ]          && out="${out}$(printf '\033[90m/\033[0m \033[36mmy-project\033[0m')"
+    [ "${STATUSLINE_GIT:-0}" = "1" ]          && out="${out}$(printf ' \033[90m/\033[0m \033[32m🌿 \033[37mmain\033[0m')"
+    [ "${STATUSLINE_SESSION:-0}" = "1" ]      && out="${out}$(printf ' \033[90m|\033[0m 🔸 \033[33m12.3K\033[0m 💰 \033[32m$0.042\033[0m')"
+    [ "${STATUSLINE_CONTEXT:-0}" = "1" ]      && out="${out}$(printf ' \033[90m|\033[0m \033[32m23%%\033[0m \033[32m━━━\033[90m─────────\033[0m')"
+    [ "${STATUSLINE_RTK:-0}" = "1" ]          && out="${out}$(printf ' \033[90m|\033[0m ✂️ \033[32m1.5M (5.5%%)\033[0m')"
+    [ "${STATUSLINE_SESSION_TIME:-0}" = "1" ] && out="${out}$(printf ' \033[90m|\033[0m ⏱️ \033[37m42m\033[0m')"
+    [ "${STATUSLINE_MEM:-0}" = "1" ]          && out="${out}$(printf ' \033[90m|\033[0m 🔋 \033[37m8.2/32GB\033[0m')"
+    [ "${STATUSLINE_MODEL:-0}" = "1" ]        && out="${out}$(printf ' \033[90m|\033[0m 🧠 \033[96mSonnet 4.6\033[0m')"
+    [ "${STATUSLINE_TODAY:-0}" = "1" ]        && out="${out}$(printf ' \033[90m|\033[0m Today: \033[37m(🔸 \033[33m45.2K\033[0m 💰 \033[32m$0.156\033[37m)\033[0m')"
+    [ "${STATUSLINE_MONTH:-0}" = "1" ]        && out="${out}$(printf ' \033[90m|\033[0m Month: \033[32m$12.34\033[0m')"
+    echo ""
+    echo "Preview:"
+    printf '%s\n' "$out"
 }
 
 ask "current directory"     STATUSLINE_DIR          "/ my-project"
@@ -476,6 +487,7 @@ ask "model name"            STATUSLINE_MODEL         "🧠 Sonnet 4.6"
 ask "today tokens + cost"   STATUSLINE_TODAY         "Today: (🔸 45.2K 💰 \$0.156)"
 ask "monthly cost"          STATUSLINE_MONTH         "Month: \$12.34"
 
+show_preview
 echo ""
 echo "Config written to $CONF"
 echo ""
