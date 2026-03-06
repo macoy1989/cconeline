@@ -1,5 +1,5 @@
 #!/bin/bash
-# Sets up the Claude Code status line: symlink + settings.json entry
+# Sets up the Claude Code status line: copies script + patches settings.json
 set -e
 
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -12,19 +12,18 @@ if ! command -v jq &>/dev/null; then
     exit 1
 fi
 
-# Symlink statusline.sh (skip if repo IS the .claude dir)
-if [ "$REPO_DIR" = "$CLAUDE_DIR" ]; then
-    echo "Repo is already the Claude config dir — skipping symlink."
-else
-    TARGET="$CLAUDE_DIR/statusline.sh"
-    if [ -e "$TARGET" ] && [ ! -L "$TARGET" ]; then
-        BACKUP="${TARGET}.backup.$(date +%Y%m%d_%H%M%S)"
-        echo "Backing up existing file: $TARGET -> $BACKUP"
-        mv "$TARGET" "$BACKUP"
-    fi
-    ln -sf "$REPO_DIR/statusline.sh" "$TARGET"
-    echo "Symlinked: $TARGET -> $REPO_DIR/statusline.sh"
+# Copy statusline.sh to ~/.claude/ (copy instead of symlink so it survives cache cleanup)
+TARGET="$CLAUDE_DIR/statusline.sh"
+if [ -L "$TARGET" ]; then
+    rm "$TARGET"
+elif [ -e "$TARGET" ]; then
+    BACKUP="${TARGET}.backup.$(date +%Y%m%d_%H%M%S)"
+    echo "Backing up existing file: $TARGET -> $BACKUP"
+    mv "$TARGET" "$BACKUP"
 fi
+cp "$REPO_DIR/statusline.sh" "$TARGET"
+chmod +x "$TARGET"
+echo "Installed: $TARGET"
 
 # Patch settings.json with statusLine entry (preserves all other keys)
 SETTINGS="$CLAUDE_DIR/settings.json"
