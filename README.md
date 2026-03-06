@@ -41,11 +41,11 @@ npx cconeline
 ```bash
 git clone git@github.com:medhatdawoud/cconeline.git ~/.claude/cconeline
 cd ~/.claude/cconeline
-./setup-statusline.sh
+bash bin/cconeline
 ```
 
 The setup script will:
-- Copy `statusline.sh` into `~/.claude/`
+- Write `statusline.sh` into `~/.claude/`
 - Update `~/.claude/settings.json` with the statusLine command
 - Interactively configure which sections to show
 
@@ -71,4 +71,4 @@ STATUSLINE_TODAY=1
 STATUSLINE_MONTH=1
 ```
 
-Re-run `cconeline` (or `./setup-statusline.sh`) to reconfigure interactively.
+Re-run `cconeline` to reconfigure interactively.
