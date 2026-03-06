@@ -27,13 +27,15 @@ Each section is individually toggleable via `~/.claude/statusline.conf`.
 
 ```bash
 npm install -g cconeline
-cconeline
+cconeline        # interactive setup
+cconeline -y     # accept all defaults
 ```
 
 **Via npx (no install):**
 
 ```bash
 npx cconeline
+npx cconeline -y  # accept all defaults
 ```
 
 **Via git:**
@@ -41,7 +43,8 @@ npx cconeline
 ```bash
 git clone git@github.com:medhatdawoud/cconeline.git ~/.claude/cconeline
 cd ~/.claude/cconeline
-bash bin/cconeline
+bash bin/cconeline        # interactive setup
+bash bin/cconeline -y     # accept all defaults
 ```
 
 The setup script will:
