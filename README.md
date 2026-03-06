@@ -1,4 +1,4 @@
-# ccline
+# cconeline
 
 Custom status line for [Claude Code](https://claude.ai/code) CLI.
 
@@ -24,21 +24,21 @@ Each section is individually toggleable via `~/.claude/statusline.conf`.
 **Via npm (recommended):**
 
 ```bash
-npm install -g ccline
-ccline
+npm install -g cconeline
+cconeline
 ```
 
 **Via npx (no install):**
 
 ```bash
-npx ccline
+npx cconeline
 ```
 
 **Via git:**
 
 ```bash
-git clone git@github.com:medhatdawoud/ccline.git ~/.claude/ccline
-cd ~/.claude/ccline
+git clone git@github.com:medhatdawoud/cconeline.git ~/.claude/cconeline
+cd ~/.claude/cconeline
 ./setup-statusline.sh
 ```
 
@@ -69,4 +69,4 @@ STATUSLINE_TODAY=1
 STATUSLINE_MONTH=1
 ```
 
-Re-run `ccline` (or `./setup-statusline.sh`) to reconfigure interactively.
+Re-run `cconeline` (or `./setup-statusline.sh`) to reconfigure interactively.
